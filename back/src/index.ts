@@ -1,35 +1,69 @@
 import "reflect-metadata";
-import express from "express";
-import cors from "cors";
+import { ApolloServer, gql } from "apollo-server";
 import dataSource from "./utils";
-import wilderController from "./controller/wilder";
-import skillController from "./controller/skill";
-import gradeController from "./controller/grade";
 
-const app = express();
+import { Wilder } from "./entity/wilder";
+import { Skill } from "./entity/skill";
 
-app.use(express.json());
-app.use(cors({ origin: "http://localhost:3000" }));
+const typeDefs = gql`
+  type Wilder {
+    name: String
+    grades: [Grade]
+  }
+  type Skill {
+    name: String
+  }
+  type Grade {
+    grade: Int
+    skill: Skill
+  }
+  type Query {
+    getAllWilders: [Wilder]
+  }
+  type Mutation {
+    createSkill(name: String): Skill
+  }
+`;
 
-app.get("/", (req, res) => {
-  res.send("Hello world");
-});
-
-app.get("/api/wilder", wilderController.read);
-app.post("/api/wilder", wilderController.create);
-
-app.get("/api/skill", skillController.read);
-app.post("/api/skill", skillController.create);
-
-app.post("/api/grade", gradeController.create);
+const resolvers = {
+  Query: {
+    getAllWilders: async () => {
+      const allWilders = await dataSource.manager.find(Wilder, {
+        relations: {
+          grades: {
+            skill: true,
+          },
+        },
+      });
+      console.log(JSON.stringify(allWilders, null, 2));
+      return allWilders;
+    },
+  },
+  Mutation: {
+    createSkill: async (_: any, args: any) => {
+      console.log(args);
+      const skillToCreate = new Skill();
+      skillToCreate.name = args.name;
+      return await dataSource.manager.save(Skill, skillToCreate);
+    },
+  },
+};
 
 const port = 5000;
 
 const start = async (): Promise<void> => {
   await dataSource.initialize();
-  app.listen(port, () => {
-    console.log(`Example app listening on http://localhost:${port}`);
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
   });
+
+  try {
+    const { url }: { url: string } = await server.listen({ port });
+    console.log(`🚀  Server ready at ${url}`);
+  } catch (err) {
+    console.log("Error starting the server");
+  }
 };
 
 void start();
