@@ -1,8 +1,25 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
+import { useQuery, gql } from "@apollo/client";
 import "./App.css";
 import Wilder, { IWilderProps } from "./components/Wilder";
 import AddWilderForm from "./components/AddWilderForm";
+
+export const GET_WILDERS = gql`
+  query GetAllWilders {
+    getAllWilders {
+      id
+      name
+      grades {
+        id
+        grade
+        skill {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
 
 function App() {
   const dataManipulation = (dataFromApi: any) => {
@@ -16,18 +33,14 @@ function App() {
     });
     return newData;
   };
-  const [wilders, setWilders] = useState<IWilderProps[]>([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const wildersFromApi = await axios.get(
-        "http://localhost:5000/api/wilder"
-      );
-      const formattedWilders = dataManipulation(wildersFromApi.data);
-      setWilders(formattedWilders);
-    };
-    fetchData();
-  }, []);
+  const { loading, error, data } = useQuery(GET_WILDERS);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
+  console.log("data from graphql", data.getAllWilders);
+
   return (
     <div>
       <header>
@@ -39,14 +52,16 @@ function App() {
         <AddWilderForm />
         <h2>Wilders</h2>
         <section className="card-row">
-          {wilders.map((el, index) => (
-            <Wilder
-              key={index}
-              name={el.name}
-              city={el.city}
-              skills={el.skills}
-            />
-          ))}
+          {dataManipulation(data.getAllWilders).map(
+            (el: any, index: number) => (
+              <Wilder
+                key={index}
+                name={el.name}
+                city={el.city}
+                skills={el.skills}
+              />
+            )
+          )}
         </section>
       </main>
       <footer>
