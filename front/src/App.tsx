@@ -22,7 +22,7 @@ export const GET_WILDERS = gql`
 `;
 
 function App() {
-  const dataManipulation = (dataFromApi: any) => {
+  const dataManipulation = (dataFromApi: any): IWilderProps[] => {
     const newData = dataFromApi.map((wilder: { grades: []; name: string }) => {
       const cleanSkills = wilder.grades.map(
         (grade: { grade: number; skill: { name: string } }) => {
@@ -52,16 +52,14 @@ function App() {
         <AddWilderForm />
         <h2>Wilders</h2>
         <section className="card-row">
-          {dataManipulation(data.getAllWilders).map(
-            (el: any, index: number) => (
-              <Wilder
-                key={index}
-                name={el.name}
-                city={el.city}
-                skills={el.skills}
-              />
-            )
-          )}
+          {dataManipulation(data.getAllWilders).map((el, index) => (
+            <Wilder
+              key={index}
+              name={el.name}
+              city={el.city}
+              skills={el.skills}
+            />
+          ))}
         </section>
       </main>
       <footer>

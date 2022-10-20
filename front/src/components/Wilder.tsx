@@ -5,6 +5,7 @@ export interface IWilderProps {
   name: string;
   city: string;
   skills: ISkillProps[];
+  grades?: [];
 }
 
 const Wilder = ({ name, city, skills }: IWilderProps) => {
