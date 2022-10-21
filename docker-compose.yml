@@ -5,6 +5,9 @@ services:
     user: postgres
     environment:
       POSTGRES_PASSWORD: example
+      PGDATA: customDataFolder
+    volumes:
+      - ./dbData:/var/lib/postgresql/data/customDataFolder
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 5s
