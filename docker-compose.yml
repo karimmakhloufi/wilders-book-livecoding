@@ -2,7 +2,6 @@ services:
   db:
     image: postgres
     restart: always
-    user: postgres
     environment:
       POSTGRES_PASSWORD: example
       PGDATA: customDataFolder
