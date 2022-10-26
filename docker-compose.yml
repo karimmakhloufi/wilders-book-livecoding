@@ -8,7 +8,7 @@ services:
     volumes:
       - ./dbData:/var/lib/postgresql/data/customDataFolder
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
+      test: ["CMD-SHELL", "pg_isready -d postgres -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 10
