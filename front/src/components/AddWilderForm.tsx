@@ -1,7 +1,24 @@
-import axios from "axios";
 import { useState } from "react";
+import { gql, useMutation } from "@apollo/client";
+import { GET_WILDERS } from "../App";
+
+const CREATE_WILDER = gql`
+  mutation Mutation($name: String!) {
+    createWilder(name: $name) {
+      name
+    }
+  }
+`;
+
 const AddWilderForm = () => {
   const [wilderName, setWilderName] = useState("");
+  const [createNewWilder, { data, loading, error }] = useMutation(
+    CREATE_WILDER,
+    { refetchQueries: [{ query: GET_WILDERS }] }
+  );
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
   return (
     <div>
       <input
@@ -14,9 +31,8 @@ const AddWilderForm = () => {
       <button
         onClick={async () => {
           try {
-            await axios.post("http://localhost:5000/api/wilder", {
-              name: wilderName,
-            });
+            await createNewWilder({ variables: { name: wilderName } });
+            console.log("data after mutation", data);
           } catch (err) {
             console.log(err);
           }
