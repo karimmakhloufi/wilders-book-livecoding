@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery, gql } from "@apollo/client";
-import "./App.css";
 import Wilder, { IWilderProps } from "../components/Wilder";
 import AddWilderForm from "../components/AddWilderForm";
 
@@ -22,6 +22,16 @@ export const GET_WILDERS = gql`
 `;
 
 const HomePage = () => {
+  const token = localStorage.getItem("token");
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (token === null) {
+      navigate("/login");
+    }
+  });
+
   const dataManipulation = (dataFromApi: any): IWilderProps[] => {
     const newData = dataFromApi.map((wilder: { grades: []; name: string }) => {
       const cleanSkills = wilder.grades.map(
