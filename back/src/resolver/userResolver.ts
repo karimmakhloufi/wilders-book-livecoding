@@ -21,7 +21,7 @@ export class UserResolver {
 
       if (await argon2.verify(userFromDB.hashedPassword, password)) {
         const token = jwt.sign(
-          { email: userFromDB.email },
+          { email: userFromDB.email, role: userFromDB.role },
           process.env.JWT_SECRET_KEY
         );
         return token;
@@ -42,6 +42,7 @@ export class UserResolver {
     const newUser = new User();
     newUser.email = email;
     newUser.hashedPassword = await argon2.hash(password);
+    newUser.role = "USER";
     const userFromDB = await dataSource.manager.save(User, newUser);
     console.log(userFromDB);
     return userFromDB;

@@ -16,6 +16,7 @@ export class WilderResolver {
     });
   }
 
+  @Authorized("ADMIN")
   @Mutation(() => Wilder)
   async createWilder(@Arg("name") name: string): Promise<Wilder> {
     const newWilder = new Wilder();

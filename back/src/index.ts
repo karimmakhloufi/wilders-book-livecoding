@@ -15,11 +15,16 @@ const start = async (): Promise<void> => {
   await dataSource.initialize();
   const schema = await buildSchema({
     resolvers: [WilderResolver, UserResolver],
-    authChecker: ({ context }) => {
+    authChecker: ({ context }, roles) => {
       console.log("context", context);
+      console.log("roles in decorator", roles);
       if (context.email === undefined) {
         return false;
-      } else return true;
+      } else if (roles.length === 0 || roles.includes(context.role)) {
+        return true;
+      } else {
+        return false;
+      }
     },
   });
   const server = new ApolloServer({

@@ -14,4 +14,7 @@ export class User {
 
   @Column()
   hashedPassword: string;
+
+  @Column()
+  role: string;
 }
