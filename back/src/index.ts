@@ -37,11 +37,13 @@ const start = async (): Promise<void> => {
         return {};
       } else {
         try {
-          const user = jwt.verify(
-            req.headers.authorization,
-            process.env.JWT_SECRET_KEY
-          );
-          return user;
+          const bearer = req.headers.authorization.split("Bearer ")[1];
+          if (bearer.length > 0) {
+            const user = jwt.verify(bearer, process.env.JWT_SECRET_KEY);
+            return user;
+          } else {
+            return {};
+          }
         } catch (err) {
           console.log(err);
           return {};
