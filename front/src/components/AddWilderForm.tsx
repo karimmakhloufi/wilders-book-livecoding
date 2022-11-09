@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { gql, useMutation } from "@apollo/client";
-import { GET_WILDERS } from "../App";
+import { GET_WILDERS } from "../pages/HomePage";
 
 const CREATE_WILDER = gql`
   mutation Mutation($name: String!) {
