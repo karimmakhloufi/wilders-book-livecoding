@@ -28,7 +28,9 @@ app.post("/upload", upload.single("file"), (req: any, res: Response) => {
       console.log("Error: ", err);
       res.status(500).json({ error: err });
     } else {
-      res.status(201).json({ status: "success", filename: req.file.filename });
+      res
+        .status(201)
+        .json({ status: "success", filename: "/files/" + req.file.filename });
     }
   });
 });
