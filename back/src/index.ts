@@ -18,9 +18,9 @@ const start = async (): Promise<void> => {
     authChecker: ({ context }, roles) => {
       console.log("context", context);
       console.log("roles in decorator", roles);
-      if (context.email === undefined) {
+      if (!context.user) {
         return false;
-      } else if (roles.length === 0 || roles.includes(context.role)) {
+      } else if (roles.length === 0 || roles.includes(context.user.role)) {
         return true;
       } else {
         return false;
@@ -40,7 +40,7 @@ const start = async (): Promise<void> => {
           const bearer = req.headers.authorization.split("Bearer ")[1];
           if (bearer.length > 0) {
             const user = jwt.verify(bearer, process.env.JWT_SECRET_KEY);
-            return user;
+            return { user };
           } else {
             return {};
           }
