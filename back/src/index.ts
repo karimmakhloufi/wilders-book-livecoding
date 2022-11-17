@@ -18,7 +18,7 @@ const start = async (): Promise<void> => {
     authChecker: ({ context }, roles) => {
       console.log("context", context);
       console.log("roles in decorator", roles);
-      if (!context.user) {
+      if (context.user === undefined) {
         return false;
       } else if (roles.length === 0 || roles.includes(context.user.role)) {
         return true;
