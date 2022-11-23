@@ -4,9 +4,8 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: example
-      PGDATA: customDataFolder
     volumes:
-      - ./dbData:/var/lib/postgresql/data/customDataFolder
+      - postgres:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d postgres -U postgres"]
       interval: 5s
@@ -56,3 +55,6 @@ services:
       - ./images-upload-service/uploads:/app/uploads
     ports:
       - 8000:8000
+
+volumes:
+  postgres:
