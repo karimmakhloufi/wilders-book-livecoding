@@ -21,6 +21,18 @@ export const GET_WILDERS = gql`
   }
 `;
 
+export const dataManipulation = (dataFromApi: any): IWilderProps[] => {
+  const newData = dataFromApi.map((wilder: { grades: []; name: string }) => {
+    const cleanSkills = wilder.grades.map(
+      (grade: { grade: number; skill: { name: string } }) => {
+        return { title: grade.skill.name, votes: grade.grade };
+      }
+    );
+    return { name: wilder.name, skills: cleanSkills };
+  });
+  return newData;
+};
+
 const HomePage = () => {
   const token = localStorage.getItem("token");
 
@@ -31,18 +43,6 @@ const HomePage = () => {
       navigate("/login");
     }
   });
-
-  const dataManipulation = (dataFromApi: any): IWilderProps[] => {
-    const newData = dataFromApi.map((wilder: { grades: []; name: string }) => {
-      const cleanSkills = wilder.grades.map(
-        (grade: { grade: number; skill: { name: string } }) => {
-          return { title: grade.skill.name, votes: grade.grade };
-        }
-      );
-      return { name: wilder.name, skills: cleanSkills };
-    });
-    return newData;
-  };
 
   const { loading, error, data } = useQuery(GET_WILDERS);
 
