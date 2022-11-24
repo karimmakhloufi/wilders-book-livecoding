@@ -13,7 +13,7 @@ services:
   backend:
     build: ./back
     env_file:
-      - .env
+      - vars.env
     ports:
       - 5000:5000
     healthcheck:
