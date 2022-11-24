@@ -1,0 +1,13 @@
+name: integration-test-workflow
+
+on: pull_request
+
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Integration test
+        run: docker compose -f docker-compose.test.yml up --build --exit-code-from testrunner
