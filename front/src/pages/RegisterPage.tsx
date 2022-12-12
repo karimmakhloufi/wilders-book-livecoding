@@ -1,26 +1,26 @@
 import { useState } from "react";
-import { gql, useLazyQuery } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 
-const GET_TOKEN = gql`
-  query Query($password: String!, $email: String!) {
-    getToken(password: $password, email: $email)
+const REGISTER = gql`
+  mutation Mutation($password: String!, $email: String!) {
+    createUser(password: $password, email: $email) {
+      email
+    }
   }
 `;
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [loadToken] = useLazyQuery(GET_TOKEN, {
+  const [register] = useMutation(REGISTER, {
     variables: {
       email: username,
       password: password,
     },
-    onCompleted(data) {
-      console.log(data.getToken);
-      localStorage.setItem("token", data.getToken);
-      navigate("/");
+    onCompleted() {
+      navigate("/login");
     },
     onError(error) {
       console.log(error);
@@ -29,7 +29,7 @@ const LoginPage = () => {
 
   return (
     <div>
-      Login{" "}
+      Email{" "}
       <input
         placeholder={"email"}
         value={username}
@@ -49,13 +49,13 @@ const LoginPage = () => {
       <br />
       <button
         onClick={() => {
-          loadToken();
+          register();
         }}
       >
-        Login
+        Register
       </button>
     </div>
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
