@@ -15,7 +15,7 @@ services:
   backend:
     build: ./back
     env_file:
-      - vars.env
+      - .env.local
     volumes:
       - ./back/src:/app/src
     ports:
@@ -31,6 +31,7 @@ services:
 
   frontend:
     build: ./front
+    env_file: .env.local
     volumes:
       - ./front/src:/app/src
     ports:

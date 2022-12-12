@@ -12,8 +12,10 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+console.log("env", process.env);
+
 const httpLink = createHttpLink({
-  uri: "http://backend:5000/",
+  uri: process.env.REACT_APP_API_URL,
 });
 
 const authLink = setContext((_, { headers }) => {

@@ -13,9 +13,7 @@ services:
   backend:
     build: ./back
     env_file:
-      - vars.env
-    ports:
-      - 5000:5000
+      - .env.local
     healthcheck:
       test: 'curl --fail --request POST --header ''content-type: application/json'' --url ''http://localhost:5000'' --data ''{"query":"query { __typename }"}'' || exit 1'
       interval: 5s
@@ -27,8 +25,7 @@ services:
 
   frontend:
     build: ./front
-    ports:
-      - 3000:3000
+    env_file: .env.e2e
     healthcheck:
       test: "curl --fail --request GET --url 'http://localhost:3000' || exit 1"
       interval: 5s
