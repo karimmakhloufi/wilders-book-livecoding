@@ -21,7 +21,7 @@ export const GET_WILDERS = gql`
   }
 `;
 
-export const dataManipulation = (dataFromApi: any): IWilderProps[] => {
+export const getWildersWithSkills = (dataFromApi: any): IWilderProps[] => {
   const newData = dataFromApi.map((wilder: { grades: []; name: string }) => {
     const cleanSkills = wilder.grades.map(
       (grade: { grade: number; skill: { name: string } }) => {
@@ -62,7 +62,7 @@ const HomePage = () => {
         <AddWilderForm />
         <h2>Wilders</h2>
         <section className="card-row">
-          {dataManipulation(data.getAllWilders).map((el, index) => (
+          {getWildersWithSkills(data.getAllWilders).map((el, index) => (
             <Wilder
               key={index}
               name={el.name}

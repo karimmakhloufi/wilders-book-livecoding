@@ -1,18 +1,18 @@
-import { dataManipulation } from "../pages/HomePage";
+import { getWildersWithSkills } from "./HomePage";
 
 test("it does not crash when an empty array is passed", () => {
-  expect(dataManipulation([])).toEqual([]);
+  expect(getWildersWithSkills([])).toEqual([]);
 });
 
 test("it works with 1 wilder with only a name", () => {
-  expect(dataManipulation([{ name: "John", grades: [] }])).toEqual([
+  expect(getWildersWithSkills([{ name: "John", grades: [] }])).toEqual([
     { name: "John", skills: [] },
   ]);
 });
 
 test("it works with 1 wilder with 1 grade", () => {
   expect(
-    dataManipulation([
+    getWildersWithSkills([
       { name: "John", grades: [{ skill: { name: "JS" }, grade: 10 }] },
     ])
   ).toEqual([{ name: "John", skills: [{ title: "JS", votes: 10 }] }]);
@@ -20,7 +20,7 @@ test("it works with 1 wilder with 1 grade", () => {
 
 test("it works with 1 wilder with multiple grades", () => {
   expect(
-    dataManipulation([
+    getWildersWithSkills([
       {
         name: "John",
         grades: [
@@ -42,7 +42,7 @@ test("it works with 1 wilder with multiple grades", () => {
 
 test("it works with multiple wilders with multiple grades", () => {
   expect(
-    dataManipulation([
+    getWildersWithSkills([
       {
         name: "John",
         grades: [
