@@ -8,5 +8,9 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
+      - name: create env file
+        run: |
+          touch vars.env
+          echo "JWT_SECRET_KEY=qkdjfhqiudfhviusdfhgiousdhfsuhfgiuosdhfoiudshfog" >> vars.env
       - name: Run integration test
         run: npm run integration-test
