@@ -6,5 +6,7 @@ jobs:
   integration-test:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out code
+        uses: actions/checkout@v2
       - name: Run e2e test
         run: npm run e2e-test
