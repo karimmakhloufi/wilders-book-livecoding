@@ -1,0 +1,10 @@
+name: e2e
+
+on: push
+
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run e2e test
+        run: npm run e2e-test
