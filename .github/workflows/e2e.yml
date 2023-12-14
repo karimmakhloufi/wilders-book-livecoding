@@ -3,7 +3,7 @@ name: e2e
 on: push
 
 jobs:
-  integration-test:
+  e2e-test:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
